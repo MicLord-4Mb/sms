@@ -1,18 +1,15 @@
 import { Grade } from "./grade";
-
-export interface HasId {
-  id: string | number;
-}
+import type { HasId, UserID, CourseID } from "./types"
 
 /**
  * Abstract class representing a person with a unique ID, name, and date of birth.
  */
 export abstract class Person implements HasId {
-  readonly id: string | number;
+  readonly id: UserID;
   #_name: string;
   #_dateOfBirth: Date;
 
-  constructor(id: string | number, name: string, dateOfBirth: Date) {
+  constructor(id: UserID, name: string, dateOfBirth: Date) {
     this.id = id;
     this.#_name = name;
     this.#_dateOfBirth = dateOfBirth;
@@ -58,9 +55,8 @@ export abstract class Person implements HasId {
  */
 export class Student extends Person {
   #_grades: Grade[] = [];
-  // TODO write class Grade (courseID, studentID, score)
 
-  constructor(id: string | number, name: string, dateOfBirth: Date) {
+  constructor(id: UserID, name: string, dateOfBirth: Date) {
     super(id, name, dateOfBirth);
   }
 
@@ -71,7 +67,7 @@ export class Student extends Person {
    * @param courseId - The unique identifier of the course.
    * @param score - The score achieved.
    */
-  addGrade(courseId: string | number, score: number): void {
+  addGrade(courseId: CourseID, score: number): void {
     const grade = new Grade(courseId, this.id, score);
     this.#_grades.push(grade);
   }
