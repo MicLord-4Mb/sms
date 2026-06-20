@@ -1,3 +1,8 @@
+export enum CourseType {
+  COMPULSORY = 'Compulsory',
+  OPTIONAL = 'Optional'
+}
+
 /*
  * interface section
  */

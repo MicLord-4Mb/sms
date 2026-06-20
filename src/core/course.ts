@@ -1,9 +1,5 @@
-import type { HasId, CourseID } from "./types";
+import {type HasId, type CourseID, CourseType} from "./types";
 
-enum CourseType {
-  COMPULSORY = 'Compulsory',
-  OPTIONAL = 'Optional'
-}
 
 /**
  * Represents a course offered by the university.
