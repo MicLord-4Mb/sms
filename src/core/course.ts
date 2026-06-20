@@ -13,8 +13,8 @@ export class Course implements HasId {
   #_courseName!: string;
   #_credits!: number;
   #_type: CourseType;
-  #_hasBeenUsed: Boolean = false;
-  #_isArchived: Boolean = false;
+  #_hasBeenUsed: boolean = false;
+  #_isArchived: boolean = false;
 
   constructor(
     id: CourseID,
