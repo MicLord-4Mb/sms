@@ -18,7 +18,7 @@ export interface ICourseDTO extends HasId {
   id: CourseID;
   courseName: string;
   credits: number;
-  ype: CourseType;
+  type: CourseType;
   hasBeenUsed: boolean;
   isArchived: boolean;
 }
