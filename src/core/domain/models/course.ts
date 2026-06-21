@@ -1,5 +1,4 @@
-import {type HasId, type CourseID, CourseType} from "../types.ts";
-
+import {type HasId, type CourseID, CourseType} from "../types";
 
 /**
  * Represents a course offered by the university.

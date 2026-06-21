@@ -1,7 +1,8 @@
 import { Student } from '../domain/models/student.ts';
 import { Course } from '../domain/models/course.ts';
-import { Repository } from '../repositories/repository.ts';
-import {type CourseID, CourseType, type UserID} from '../domain/types.ts';
+import {type CourseID, CourseType, type StudentID} from '../domain/types.ts';
+import type {ICourseDTO, IStudentDTO} from "../dto/dto.ts";
+import type {IRepository} from "../repositories/interfaces.ts";
 
 /**
  * Main management class handling operations for students, courses, and grades.
@@ -9,19 +10,10 @@ import {type CourseID, CourseType, type UserID} from '../domain/types.ts';
  */
 export class UniversityManager {
 
-  // TODO if I wanna do universal repo storage -> i need DI: receive repo in the constructor...
-  readonly studentRepo = new Repository<Student>();
-  readonly coursesRepo = new Repository<Course>();
-  private readonly storageKey = 'university_data';
-
-  constructor() {
-    this.loadData();
-  }
-
-  // TODO make load/save/init async
-  private saveData(): void {}
-  private loadData() {}
-
+  constructor(
+    private readonly studentRepo: IRepository<IStudentDTO>,
+    private readonly coursesRepo: IRepository<ICourseDTO>
+  ) {}
 
   /**
    * Adds a new student to the university.
@@ -30,15 +22,15 @@ export class UniversityManager {
    * @param dateOfBirth - The student's date of birth.
    * @returns The created student instance.
    */
-  addStudent (id: UserID, name: string, dateOfBirth: Date): Student {
+  addStudent (id: StudentID, name: string, dateOfBirth: Date): Student {
     const student = new Student(id, name, dateOfBirth);
     this.studentRepo.add(student);
     this.saveData();
     return student;
   }
   // TODO write this
-  updateStudent(id: UserID, name: string, dateOfBirth: Date): void {}
-  deleteStudent(id: UserID): void {}
+  updateStudent(id: StudentID, name: string, dateOfBirth: Date): void {}
+  deleteStudent(id: StudentID): void {}
 
   addCourse(
     id: CourseID,
@@ -58,7 +50,7 @@ export class UniversityManager {
   deleteCourse(id: CourseID): void {}
   clearAllData(): void {}
 
-  assignGradeToStudent(studentID: UserID, courseID: CourseID, score: number): void {}
+  assignGradeToStudent(studentID: StudentID, courseID: CourseID, score: number): void {}
 
   findStudentByName(name:string): Student[] {
     return this.studentRepo.getAll()

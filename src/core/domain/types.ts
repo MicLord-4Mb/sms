@@ -3,10 +3,6 @@ export enum CourseType {
   OPTIONAL = 'Optional'
 }
 
-/*
- * repositories section
- */
-
 export interface HasId {
   id: string | number;
 }
@@ -15,11 +11,11 @@ export interface HasId {
  *  Types section
  */
 
-export type UserID = (number | string) & {readonly __brand: unique symbol};
+export type StudentID = (number | string) & {readonly __brand: unique symbol};
 export type CourseID = (number | string) & {readonly __brand: unique symbol};
 
-export function createUserID(id: string | number): UserID {
-  return id as UserID;
+export function createUserID(id: string | number): StudentID {
+  return id as StudentID;
 }
 
 export function createCourseID(id: string| number): CourseID {
