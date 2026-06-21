@@ -1,4 +1,4 @@
-import {type HasId, type CourseID, CourseType} from "./types";
+import {type HasId, type CourseID, CourseType} from "../types.ts";
 
 
 /**

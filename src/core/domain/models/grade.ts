@@ -1,4 +1,4 @@
-import type {CourseID, UserID} from "./types";
+import type {CourseID, UserID} from "../types.ts";
 
 /**
  * Represents a grade assigned to a student for a specific course.

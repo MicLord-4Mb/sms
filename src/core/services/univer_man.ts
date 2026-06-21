@@ -1,13 +1,15 @@
-import { Student } from './student';
-import { Course } from './course';
-import { Repository } from './repository';
-import {type CourseID, CourseType, type UserID} from './types';
+import { Student } from '../domain/models/student.ts';
+import { Course } from '../domain/models/course.ts';
+import { Repository } from '../repositories/repository.ts';
+import {type CourseID, CourseType, type UserID} from '../domain/types.ts';
 
 /**
  * Main management class handling operations for students, courses, and grades.
  * Acts as the central core of the application business logic.
  */
 export class UniversityManager {
+
+  // TODO if I wanna do universal repo storage -> i need DI: receive repo in the constructor...
   readonly studentRepo = new Repository<Student>();
   readonly coursesRepo = new Repository<Course>();
   private readonly storageKey = 'university_data';

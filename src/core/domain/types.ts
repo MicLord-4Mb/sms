@@ -4,7 +4,7 @@ export enum CourseType {
 }
 
 /*
- * interface section
+ * repositories section
  */
 
 export interface HasId {

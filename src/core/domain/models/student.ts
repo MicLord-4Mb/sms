@@ -1,5 +1,5 @@
-import { Grade } from "./grade";
-import type { HasId, UserID, CourseID } from "./types"
+import { Grade } from "./grade.ts";
+import type { HasId, UserID, CourseID } from "../types.ts"
 
 /**
  * Abstract class representing a person with a unique ID, name, and date of birth.
