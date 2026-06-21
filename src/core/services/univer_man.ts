@@ -18,6 +18,10 @@ export class UniversityManager {
   private mapDtoToStudent(dto: IStudentDTO): Student {}
   private mapStudentToDto(student: Student): IStudentDTO {}
 
+  private mapDtoToCourse(dto: ICourseDTO): Course {}
+  private mapCourseToDto(course: Course): ICourseDTO {}
+
+
 
   /**
    * Adds a new student to the university.
@@ -26,40 +30,47 @@ export class UniversityManager {
    * @param dateOfBirth - The student's date of birth.
    * @returns The created student instance.
    */
-  addStudent (id: StudentID, name: string, dateOfBirth: Date): Student {
+  async addStudent (id: StudentID, name: string, dateOfBirth: Date): Promise<Student> {
     const student = new Student(id, name, dateOfBirth);
-    this.studentRepo.add(student);
-    this.saveData();
+    const dto: IStudentDTO = this.mapStudentToDto(student);
+    await this.studentRepo.create(dto);
     return student;
   }
   // TODO write this
-  updateStudent(id: StudentID, name: string, dateOfBirth: Date): void {}
-  deleteStudent(id: StudentID): void {}
+  async updateStudent(id: StudentID, name: string, dateOfBirth: Date): Promise<Student> {}
+  async deleteStudent(id: StudentID): Promise<boolean> {}
 
-  addCourse(
+  async addCourse(
     id: CourseID,
     courseName: string,
     credits: number,
     type: CourseType = CourseType.COMPULSORY
-    ): Course {
+    ): Promise<Course> {
 
     const course = new Course(id, courseName, credits, type);
-    this.coursesRepo.add(course);
-    this.saveData();
+    const dto: ICourseDTO = this.mapCourseToDto(course);
+    await this.coursesRepo.create(dto);
     return course;
   }
 
   // TODO and this
-  updateCourse( id: CourseID, courseName: string, credits: number, type: CourseType ): void {}
-  deleteCourse(id: CourseID): void {}
-  clearAllData(): void {}
+  async updateCourse( id: CourseID, courseName: string, credits: number, type: CourseType ): Promise<Course> {}
 
-  assignGradeToStudent(studentID: StudentID, courseID: CourseID, score: number): void {}
+  async deleteCourse(id: CourseID): Promise<boolean> {
+    const courseDto = await this.coursesRepo.getById(id);
+    if (courseDto && courseDto.hasBeenUsed) {
+      throw new Error("Cannot delete a course that has already been used. Please archive it.");
+    }
+    return await this.coursesRepo.delete(id);
+  }
+  // ?? async clearAllData(): void {}
 
-  findStudentByName(name:string): Student[] {
+  async assignGradeToStudent(studentID: StudentID, courseID: CourseID, score: number): void {}
+
+  async findStudentByName(name:string): Student[] {
     return this.studentRepo.getAll()
   }
-  findStudentByCourse(courseName: string): Student[] {
+  async findStudentByCourse(courseName: string): Student[] {
     return this.studentRepo.getAll()
   }
 
