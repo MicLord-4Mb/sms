@@ -15,6 +15,10 @@ export class UniversityManager {
     private readonly coursesRepo: IRepository<ICourseDTO>
   ) {}
 
+  private mapDtoToStudent(dto: IStudentDTO): Student {}
+  private mapStudentToDto(student: Student): IStudentDTO {}
+
+
   /**
    * Adds a new student to the university.
    * @param id - The unique ID of the student.
