@@ -1,6 +1,6 @@
 import { Student } from '../domain/models/student.ts';
 import { Course } from '../domain/models/course.ts';
-import {type CourseID, CourseType, type HasId, type PersonID} from '../domain/types.ts';
+import {type CourseID, CourseType, type PersonID} from '../domain/types.ts';
 import type {ICourseDTO, IStudentDTO} from "../dto/dto.ts";
 import type {IRepository} from "../repositories/interfaces.ts";
 
@@ -139,7 +139,7 @@ export class UniversityManager {
     student.addGrade(courseID, score);
     course.markAsUsed();
 
-    //in fact, there is no need to save the course data now..
+    //in fact, there is no need to save the course data now
     await Promise.all([
       this.studentRepo.update(this.mapStudentToDto(student)),
       this.coursesRepo.update(this.mapCourseToDto(course))
