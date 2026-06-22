@@ -15,11 +15,48 @@ export class UniversityManager {
     private readonly coursesRepo: IRepository<ICourseDTO>
   ) {}
 
-  private mapDtoToStudent(dto: IStudentDTO): Student {}
-  private mapStudentToDto(student: Student): IStudentDTO {}
+  private mapDtoToStudent(dto: IStudentDTO): Student {
+    const student = new Student(dto.id, dto.name, new Date(dto.dateOfBirth));
+    if (dto.grades) {
+      dto.grades.forEach(g => student.addGrade(g.courseId, g.score))
+    }
+    return student;
+  }
 
-  private mapDtoToCourse(dto: ICourseDTO): Course {}
-  private mapCourseToDto(course: Course): ICourseDTO {}
+  private mapStudentToDto(student: Student): IStudentDTO {
+    return {
+      id: student.id,
+      name: student.name,
+      dateOfBirth: student.dateOfBirth.toISOString(),
+      grades: student.grades.map(g => ({
+        courseId: g.courseId,
+        studentId: g.studentId,
+        score: g.score
+      }))
+    }
+  }
+
+  private mapDtoToCourse(dto: ICourseDTO): Course {
+    return new Course(
+      dto.id,
+      dto.courseName,
+      dto.credits,
+      dto.type,
+      dto.hasBeenUsed,
+      dto.isArchived
+    );
+  }
+
+  private mapCourseToDto(course: Course): ICourseDTO {
+    return {
+      id: course.id,
+      courseName: course.courseName,
+      credits: course.credits,
+      type: course.type,
+      hasBeenUsed: Boolean(course.hasBeenUsed),
+      isArchived: Boolean(course.isArchived)
+    }
+  }
 
 
 
@@ -37,7 +74,9 @@ export class UniversityManager {
     return student;
   }
   // TODO write this
-  async updateStudent(id: PersonID, name: string, dateOfBirth: Date): Promise<Student> {}
+  async updateStudent(id: PersonID, name: string, dateOfBirth: Date): Promise<Student> {
+
+  }
   async deleteStudent(id: PersonID): Promise<boolean> {}
 
   async addCourse(
