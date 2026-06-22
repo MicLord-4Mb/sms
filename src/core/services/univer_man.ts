@@ -121,15 +121,40 @@ export class UniversityManager {
     }
     return await this.coursesRepo.delete(id);
   }
+
   // ?? async clearAllData(): void {}
 
   async assignGradeToStudent(studentID: PersonID, courseID: CourseID, score: number): Promise<void> {
+    const [studentDto, courseDto] = await Promise.all([
+      this.studentRepo.getById(studentID),
+      this.coursesRepo.getById(courseID)
+    ]);
 
+    if (!studentDto) throw new Error(`Student with id ${studentID} not found`);
+    if (!courseDto) throw new Error(`Course with id ${courseID} not found`);
+
+    const student = this.mapDtoToStudent(studentDto);
+    const course = this.mapDtoToCourse(courseDto);
+
+    student.addGrade(courseID, score);
+    course.markAsUsed();
+
+    //in fact, there is no need to save the course data now..
+    await Promise.all([
+      this.studentRepo.update(this.mapStudentToDto(student)),
+      this.coursesRepo.update(this.mapCourseToDto(course))
+    ]);
   }
 
   async findStudentByName(name:string): Promise<Student[]> {
-    return this.studentRepo.getAll()
+    const query = name.trim().toLowerCase();
+    const allStudentDto = await this.studentRepo.getAll()
+
+    return allStudentDto
+      .filter(sDto => sDto.name.toLowerCase().includes(query))
+      .map(sDto => this.mapDtoToStudent(sDto));
   }
+
   async findStudentByCourse(courseName: string): Promise<Student[]> {
     const query = courseName.trim().toLowerCase();
     const [allStudents, allCourses] = await Promise.all([
