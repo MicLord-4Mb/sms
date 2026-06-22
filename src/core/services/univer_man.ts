@@ -1,6 +1,6 @@
 import { Student } from '../domain/models/student.ts';
 import { Course } from '../domain/models/course.ts';
-import {type CourseID, CourseType, type StudentID} from '../domain/types.ts';
+import {type CourseID, CourseType, type PersonID} from '../domain/types.ts';
 import type {ICourseDTO, IStudentDTO} from "../dto/dto.ts";
 import type {IRepository} from "../repositories/interfaces.ts";
 
@@ -30,15 +30,15 @@ export class UniversityManager {
    * @param dateOfBirth - The student's date of birth.
    * @returns The created student instance.
    */
-  async addStudent (id: StudentID, name: string, dateOfBirth: Date): Promise<Student> {
+  async addStudent (id: PersonID, name: string, dateOfBirth: Date): Promise<Student> {
     const student = new Student(id, name, dateOfBirth);
     const dto: IStudentDTO = this.mapStudentToDto(student);
     await this.studentRepo.create(dto);
     return student;
   }
   // TODO write this
-  async updateStudent(id: StudentID, name: string, dateOfBirth: Date): Promise<Student> {}
-  async deleteStudent(id: StudentID): Promise<boolean> {}
+  async updateStudent(id: PersonID, name: string, dateOfBirth: Date): Promise<Student> {}
+  async deleteStudent(id: PersonID): Promise<boolean> {}
 
   async addCourse(
     id: CourseID,
@@ -65,7 +65,7 @@ export class UniversityManager {
   }
   // ?? async clearAllData(): void {}
 
-  async assignGradeToStudent(studentID: StudentID, courseID: CourseID, score: number): void {}
+  async assignGradeToStudent(studentID: PersonID, courseID: CourseID, score: number): void {}
 
   async findStudentByName(name:string): Student[] {
     return this.studentRepo.getAll()

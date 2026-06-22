@@ -1,11 +1,11 @@
-import type {CourseID, StudentID} from "../types";
+import type {CourseID, PersonID} from "../types";
 
 /**
  * Represents a grade assigned to a student for a specific course.
  */
 export class Grade {
   #_courseId: CourseID;
-  #_studentId: StudentID;
+  #_studentId: PersonID;
   #_score: number;
 
   /**
@@ -16,7 +16,7 @@ export class Grade {
    */
   constructor(
     courseId: CourseID,
-    studentId: StudentID,
+    studentId: PersonID,
     score: number
   ) {
     if (score < 0 || score > 100) {
@@ -28,7 +28,7 @@ export class Grade {
   }
 
   get courseId(): CourseID { return this.#_courseId }
-  get studentId(): StudentID { return this.#_studentId }
+  get studentId(): PersonID { return this.#_studentId }
   get score(): number { return this.#_score }
 
   set score(newScore: number) {

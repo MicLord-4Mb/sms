@@ -3,7 +3,7 @@ import {type HasId, type CourseID, CourseType} from "../types";
 /**
  * Represents a course offered by the university.
  */
-export class Course implements HasId {
+export class Course implements HasId<CourseID> {
   readonly id: CourseID;
   #_courseName!: string;
   #_credits!: number;

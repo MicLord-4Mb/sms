@@ -1,15 +1,15 @@
 import { Grade } from "./grade.ts";
-import type { HasId, StudentID, CourseID } from "../types.ts"
+import type { HasId, PersonID, CourseID } from "../types.ts"
 
 /**
  * Abstract class representing a person with a unique ID, name, and date of birth.
  */
-export abstract class Person implements HasId {
-  readonly id: StudentID;
+export abstract class Person implements HasId<PersonID> {
+  readonly id: PersonID;
   #_name: string;
   #_dateOfBirth: Date;
 
-  constructor(id: StudentID, name: string, dateOfBirth: Date) {
+  constructor(id: PersonID, name: string, dateOfBirth: Date) {
     this.id = id;
     this.#_name = name;
     this.#_dateOfBirth = dateOfBirth;
@@ -56,7 +56,7 @@ export abstract class Person implements HasId {
 export class Student extends Person {
   #_grades: Grade[] = [];
 
-  constructor(id: StudentID, name: string, dateOfBirth: Date) {
+  constructor(id: PersonID, name: string, dateOfBirth: Date) {
     super(id, name, dateOfBirth);
   }
 
