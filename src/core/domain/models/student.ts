@@ -77,7 +77,8 @@ export class Student extends Person {
    * @returns The average grade, or 0 if no grades are recorded.
    */
   calculateAverageGrade(): number {
-    // TODO get all grades from all student course and calculate average...
-    return 0;
+    if (this.#_grades.length === 0) return 0;
+    const sum = this.#_grades.reduce((acc, grade) => acc + grade.score, 0);
+    return Number((sum / this.#_grades.length).toFixed(2));
   }
 }
