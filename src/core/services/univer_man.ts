@@ -1,6 +1,6 @@
 import { Student } from '../domain/models/student.ts';
 import { Course } from '../domain/models/course.ts';
-import {type CourseID, CourseType, type PersonID} from '../domain/types.ts';
+import {type CourseID, CourseType, type HasId, type PersonID} from '../domain/types.ts';
 import type {ICourseDTO, IStudentDTO} from "../dto/dto.ts";
 import type {IRepository} from "../repositories/interfaces.ts";
 
@@ -58,8 +58,6 @@ export class UniversityManager {
     }
   }
 
-
-
   /**
    * Adds a new student to the university.
    * @param id - The unique ID of the student.
@@ -73,11 +71,22 @@ export class UniversityManager {
     await this.studentRepo.create(dto);
     return student;
   }
-  // TODO write this
-  async updateStudent(id: PersonID, name: string, dateOfBirth: Date): Promise<Student> {
 
+  async updateStudent(id: PersonID, name: string, dateOfBirth: Date): Promise<Student> {
+    const existingData = await this.studentRepo.getById(id);
+    if (!existingData) throw new Error(`Student with id ${id} not found`);
+
+    const student = this.mapDtoToStudent(existingData);
+    student.name = name;
+    student.dateOfBirth = dateOfBirth;
+
+    await this.studentRepo.update(this.mapStudentToDto(student));
+    return student;
   }
-  async deleteStudent(id: PersonID): Promise<boolean> {}
+
+  async deleteStudent(id: PersonID): Promise<boolean> {
+    return await this.studentRepo.delete(id);
+  }
 
   async addCourse(
     id: CourseID,
@@ -92,8 +101,18 @@ export class UniversityManager {
     return course;
   }
 
-  // TODO and this
-  async updateCourse( id: CourseID, courseName: string, credits: number, type: CourseType ): Promise<Course> {}
+  async updateCourse( id: CourseID, courseName: string, credits: number, type: CourseType ): Promise<Course> {
+    const existingData = await this.coursesRepo.getById(id);
+    if (!existingData) throw new Error(`Course with id ${id} not found`);
+
+    const course = this.mapDtoToCourse(existingData);
+    course.courseName = courseName;
+    course.credits = credits;
+    course.type = type;
+
+    await this.coursesRepo.update(this.mapCourseToDto(course));
+    return course;
+  }
 
   async deleteCourse(id: CourseID): Promise<boolean> {
     const courseDto = await this.coursesRepo.getById(id);
@@ -104,13 +123,28 @@ export class UniversityManager {
   }
   // ?? async clearAllData(): void {}
 
-  async assignGradeToStudent(studentID: PersonID, courseID: CourseID, score: number): void {}
+  async assignGradeToStudent(studentID: PersonID, courseID: CourseID, score: number): Promise<void> {
 
-  async findStudentByName(name:string): Student[] {
-    return this.studentRepo.getAll()
-  }
-  async findStudentByCourse(courseName: string): Student[] {
-    return this.studentRepo.getAll()
   }
 
+  async findStudentByName(name:string): Promise<Student[]> {
+    return this.studentRepo.getAll()
+  }
+  async findStudentByCourse(courseName: string): Promise<Student[]> {
+    const query = courseName.trim().toLowerCase();
+    const [allStudents, allCourses] = await Promise.all([
+      this.studentRepo.getAll(),
+      this.coursesRepo.getAll()
+    ]);
+
+    const targetCourseIds = new Set<CourseID>(
+      allCourses
+        .filter(c => c.courseName.toLowerCase().includes(query))
+        .map(c => c.id)
+    );
+
+    return allStudents
+      .filter(sDto => sDto.grades.some(g => targetCourseIds.has(g.courseId)))
+      .map(sDto => this.mapDtoToStudent(sDto));
+  }
 }
