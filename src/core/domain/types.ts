@@ -3,7 +3,7 @@ export enum CourseType {
   OPTIONAL = 'Optional'
 }
 
-export interface HasId<T = string | number> {
+export interface HasId<T = PersonID | CourseID> {
   id: T;
 }
 
